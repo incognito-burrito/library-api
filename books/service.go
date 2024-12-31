@@ -12,11 +12,11 @@ func NewService(repo *Repository) *Service {
 	return &Service{repo: repo}
 }
 
-func (s *Service) GetAllBooks() ([]models.Book, error) {
-	return s.repo.GetAll()
+func (s *Service) All() ([]models.Book, error) {
+	return s.repo.All()
 }
 
-func (s *Service) AddBook(book models.Book) (models.Book, error) {
+func (s *Service) Add(book models.Book) (models.Book, error) {
 	id, err := s.repo.Create(book)
 	if err != nil {
 		return models.Book{}, err
@@ -25,11 +25,11 @@ func (s *Service) AddBook(book models.Book) (models.Book, error) {
 	return book, nil
 }
 
-func (s *Service) GetBook(id int) (models.Book, error) {
+func (s *Service) Get(id int) (models.Book, error) {
 	return s.repo.GetByID(id)
 }
 
-func (s *Service) UpdateBook(id int, book models.Book) (models.Book, error) {
+func (s *Service) Update(id int, book models.Book) (models.Book, error) {
 	book.ID = id
 	err := s.repo.Update(book)
 	if err != nil {
@@ -38,6 +38,6 @@ func (s *Service) UpdateBook(id int, book models.Book) (models.Book, error) {
 	return book, nil
 }
 
-func (s *Service) DeleteBook(id int) error {
+func (s *Service) Delete(id int) error {
 	return s.repo.Delete(id)
 }

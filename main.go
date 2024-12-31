@@ -6,21 +6,29 @@ import (
 
 	"github.com/incognito-burrito/library-api/books"
 	"github.com/incognito-burrito/library-api/db"
+	"github.com/incognito-burrito/library-api/repositories"
+	"github.com/incognito-burrito/library-api/services"
 )
 
-func main() {
+func Run() error {
 	dbConn := db.SetupSQLite("library.db")
 	defer dbConn.Close()
 
-	bookRepo := books.NewRepository(dbConn)
-	bookService := books.NewService(bookRepo)
-	bookHandler := books.NewHandler(bookService)
+	repos := repositories.InitializeRepos(dbConn)
+	services := services.InitializeServices(repos)
+
+	bookHandler := books.NewHandler(services.Book)
 
 	mux := http.NewServeMux()
-
 	mux.HandleFunc("/books", bookHandler.HandleBooks)
 	mux.HandleFunc("/books/{id}", bookHandler.HandleSingleBook)
 
 	log.Println("Server running on :8080")
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	return http.ListenAndServe(":8080", mux)
+}
+
+func main() {
+	if err := Run(); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }
