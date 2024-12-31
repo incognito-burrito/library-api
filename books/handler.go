@@ -53,7 +53,7 @@ func (h *Handler) HandleSingleBook(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) listBooks(w http.ResponseWriter) {
-	books, err := h.service.GetAllBooks()
+	books, err := h.service.All()
 	if err != nil {
 		http.Error(w, "Failed to fetch books", http.StatusInternalServerError)
 		return
@@ -69,7 +69,7 @@ func (h *Handler) addBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	book, err := h.service.AddBook(book)
+	book, err := h.service.Add(book)
 	if err != nil {
 		http.Error(w, "Failed to add book", http.StatusInternalServerError)
 		return
@@ -80,7 +80,7 @@ func (h *Handler) addBook(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) getBook(w http.ResponseWriter, id int) {
-	book, err := h.service.GetBook(id)
+	book, err := h.service.Get(id)
 	if err != nil {
 		http.Error(w, "Failed to fetch book", http.StatusInternalServerError)
 		return
@@ -102,7 +102,7 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request, id int) {
 		return
 	}
 
-	book, err := h.service.UpdateBook(id, book)
+	book, err := h.service.Update(id, book)
 	if err != nil {
 		http.Error(w, "Failed to update book", http.StatusInternalServerError)
 		return
@@ -113,7 +113,7 @@ func (h *Handler) updateBook(w http.ResponseWriter, r *http.Request, id int) {
 }
 
 func (h *Handler) deleteBook(w http.ResponseWriter, id int) {
-	if err := h.service.DeleteBook(id); err != nil {
+	if err := h.service.Delete(id); err != nil {
 		http.Error(w, "Failed to delete book", http.StatusInternalServerError)
 		return
 	}

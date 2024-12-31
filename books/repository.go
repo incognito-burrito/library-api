@@ -14,7 +14,7 @@ func NewRepository(db *sql.DB) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) GetAll() ([]models.Book, error) {
+func (r *Repository) All() ([]models.Book, error) {
 	rows, err := r.db.Query("SELECT id, title, author FROM books")
 	if err != nil {
 		return nil, err
